@@ -88,15 +88,15 @@ if isempty(isasync) || ~isasync || isempty(typeName)
     
     % Strip variable name of indexing and check if it exists in the caller ws
     wsname = regexp(name,'^[a-zA-Z]\w*','match','once');
-    inws   = strcmp(wsname, evalin('caller','builtin(''who'')'));
+    inws   = strcmp(wsname, evalin('caller','who'));
     
     if isempty(inws) || ~any(inws)
         openvar(name)
         return
     else
         suppClasses = {'uint8','uint16','uint32','uint64', 'int8', 'int16', 'int32','int64','logical','single','double','cell','dataset','table','categorical','timeseries'};
-        varClass    = evalin('caller',['builtin(''class'',',name,');']);
-        varSize     = evalin('caller',['builtin(''size'',' ,name,');']);
+        varClass    = evalin('caller',['class(' ,name  ');']);
+        varSize     = evalin('caller',['size('  ,name, ');']);
         idxSuppCl   = strcmp(varClass, suppClasses);
         if any(idxSuppCl) && numel(varSize) < 3
             suppTypes    = {'VariableTable','CellTable','DatasetVariableTable','TableObjectVariableTable','CategoricalVariableTable','TimeSeriesArrayEditorTablePanel:fDataTable'};
