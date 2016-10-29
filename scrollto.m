@@ -67,11 +67,14 @@ function scrollto(name, pos)
 narginchk(2,2)
 
 % NAME
-if ~(ischar(name) && isrow(name));
+if ~ischar(name)
+    name = inputname(1);
+elseif ~isrow(name)
     szName = size(name);
     error('scrollto:stringName','NAME should be a string, i.e. a 1xN char, was a %s%s ''%s'' instead.', ...
         sprintf('%dx',szName(1:end-1)), sprintf('%d',szName(end)),class(name))
-elseif regexp(name,'([,;][^a-zA-Z]*[a-zA-Z]|eval)','once')
+end
+if regexp(name,'([,;][^a-zA-Z]*[a-zA-Z]|eval)','once')
     error('scrollto:riskyName','NAME was: %s\n Potential security threat.',name)
 end
 
